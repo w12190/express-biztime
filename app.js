@@ -4,7 +4,7 @@
 const morgan = require('morgan')
 const express = require('express')
 const companiesRouter = require('./routes/companies.js') //Router
-const { ExpressError, NotFoundError, UnauthorizedError, BadRequestError, ForbiddenError, } = require("./expressError")
+const { NotFoundError} = require("./expressError")
 
 const app = express()
 
