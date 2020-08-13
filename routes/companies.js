@@ -1,6 +1,6 @@
 //Imports
 const express = require('express');
-const db = require('../db'); //TODO2 - if throws an error go ahead and add ./ .js
+const db = require('../db');
 const { ExpressError, NotFoundError } = require('../expressError');
 
 //Router
@@ -15,7 +15,7 @@ companiesRouter.get('/', async function (req, res, next) {
         if (companies.length === 0) {
             throw new ExpressError('no companies found')
         }
-        return res.json({ companies })// TODO  - check formatting
+        return res.json({ companies })
     }
     catch (error) {
         return next(error)
@@ -38,7 +38,7 @@ companiesRouter.get('/:code', async function (req, res, next) {
         if (!company) {
             throw new NotFoundError()
         }
-        return res.json({ company })// TODO  - check formatting
+        return res.json({ company })
     }
     catch (error) {
         return next(error)
@@ -49,7 +49,6 @@ companiesRouter.get('/:code', async function (req, res, next) {
 companiesRouter.post('/', async function (req, res, next) {
     console.log('/companies/ - POST')
     try {
-        //destructure to code, name and company 
         let { code, name, description } = req.body
         const results = await db.query(
             `INSERT INTO companies (code, name, description)
@@ -113,25 +112,6 @@ companiesRouter.delete('/:code', async function (req, res, next) {
         return next(error)
     }
 })
-
-
-/** Edit an existing company */
-/*
-PUT /companies/[code]
-Edit existing company.
-Should return 404 if company cannot be found.
-Needs to be given JSON like: {name, description}
-Returns update company object: {company: {code, name, description}}
-*/
-
-/** Delete a company */
-/*
-DELETE /companies/[code]
-Deletes company.
-Should return 404 if company cannot be found.
-Returns {status: "deleted"}
-*/
-
 
 //Export
 module.exports = companiesRouter;

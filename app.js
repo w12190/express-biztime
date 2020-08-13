@@ -3,7 +3,11 @@
 /** Imports */
 const morgan = require('morgan')
 const express = require('express')
-const companiesRouter = require('./routes/companies.js') //Router
+
+/** Routers */
+const companiesRouter = require('./routes/companies.js') 
+const invoicesRouter = require('./routes/invoices.js') 
+
 const { NotFoundError} = require("./expressError")
 
 const app = express()
@@ -15,6 +19,8 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('dev'))
 app.use('/companies', companiesRouter) //Router
+app.use('/invoices', invoicesRouter) //Router
+
 // TODO add middleware for login
 
 
