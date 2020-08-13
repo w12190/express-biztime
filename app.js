@@ -1,11 +1,25 @@
 /** BizTime express application. */
+const morgan = require('morgan')
+const express = require('express')
 
-const express = require("express");
-const { NotFoundError } = require("./expressError");
+//Router
+const companiesRouter = require('./routes/companies.js')
 
-const app = express();
+const { ExpressError, NotFoundError, UnauthorizedError, BadRequestError, ForbiddenError, } = require("./expressError")
 
-app.use(express.json());
+const app = express()
+
+
+
+/****** Middleware */
+app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+app.use(morgan('dev'))
+
+
+app.use('/companies', companiesRouter)
+// TODO add middleware for login
+
 
 
 /** Handle 404 errors -- this matches everything */
