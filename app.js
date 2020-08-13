@@ -1,10 +1,9 @@
 /** BizTime express application. */
+
+/** Imports */
 const morgan = require('morgan')
 const express = require('express')
-
-//Router
-const companiesRouter = require('./routes/companies.js')
-
+const companiesRouter = require('./routes/companies.js') //Router
 const { ExpressError, NotFoundError, UnauthorizedError, BadRequestError, ForbiddenError, } = require("./expressError")
 
 const app = express()
@@ -15,9 +14,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(morgan('dev'))
-
-
-app.use('/companies', companiesRouter)
+app.use('/companies', companiesRouter) //Router
 // TODO add middleware for login
 
 
@@ -39,5 +36,5 @@ app.use(function (err, req, res, next) {
   });
 });
 
-
+/** Export */
 module.exports = app;

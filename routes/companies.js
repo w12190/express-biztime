@@ -1,6 +1,9 @@
+//Imports
 const express = require('express');
 const db = require('../db'); //TODO2 - if throws an error go ahead and add ./ .js
 const {  ExpressError, NotFoundError, UnauthorizedError, BadRequestError, ForbiddenError, } = require('../expressError');
+
+//Router
 const companiesRouter = new express.Router();
 
 /** Returns all companies. */
@@ -58,4 +61,24 @@ companiesRouter.post('/', async function(req, res, next){
         return next(error)
     }
 })
+
+/** Edit an existing company */
+/*
+PUT /companies/[code]
+Edit existing company.
+Should return 404 if company cannot be found.
+Needs to be given JSON like: {name, description}
+Returns update company object: {company: {code, name, description}}
+*/
+
+/** Delete a company */
+/*
+DELETE /companies/[code]
+Deletes company.
+Should return 404 if company cannot be found.
+Returns {status: "deleted"}
+*/
+
+
+//Export
 module.exports = companiesRouter;
