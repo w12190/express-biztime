@@ -6,7 +6,10 @@ const { ExpressError, NotFoundError } = require('../expressError');
 //Router
 const companiesRouter = new express.Router();
 
-/** Returns all companies. Add the actual return obj data - */
+/**
+* Route serving JSON of data on a specific company.
+* Accepts the company code, returns that company's data in JSON.
+*/
 companiesRouter.get('/', async function (req, res, next) {
     console.log('/companies - GET')
     try {
@@ -22,19 +25,37 @@ companiesRouter.get('/', async function (req, res, next) {
     }
 })
 
-/** Returns a company. */
+
+/**
+* Route serving JSON of data on a specific company.
+* Accepts the company code, returns that company's data in JSON.
+*/
 companiesRouter.get('/:code', async function (req, res, next) {
     console.log('/companies/:code - GET')
     try {
         let code = req.params.code
         // console.log(code)
-        const results = await db.query(`
+
+        // query company
+        const cResults = await db.query(`
             SELECT code, name, description 
             FROM companies 
             WHERE code = $1;`, [code])
-        // console.log(results)
-        const company = results.rows[0]
-        // console.log(company)
+
+        const company = cResults.rows[0]
+        // console.log('this is company', company)
+
+        //query company's invoices
+        const iResult = await db.query(`
+            SELECT id, comp_code, amt, paid, add_date, paid_date
+            FROM invoices
+            WHERE comp_code = $1`, [code]
+            )
+
+        const invoices = iResult.rows
+        // console.log("rows", invoices)    
+
+        company.invoices = invoices
         if (!company) {
             throw new NotFoundError()
         }
@@ -45,7 +66,10 @@ companiesRouter.get('/:code', async function (req, res, next) {
     }
 })
 
-/** Adds a new company. */
+/**
+* Route that adds a new company to the DB.
+* Accepts then returns the company code, name, and description in JSON if added successfully.
+*/
 companiesRouter.post('/', async function (req, res, next) {
     console.log('/companies/ - POST')
     try {
@@ -66,7 +90,10 @@ companiesRouter.post('/', async function (req, res, next) {
     }
 })
 
-/** Adds a new company. */
+/**
+ * Route that updates an existing company's name and description in the DB.
+ * Accepts URL param of company's code and JSON of a company's name and description, returns obj containing that if update successful.
+ */
 companiesRouter.put('/:code', async function (req, res, next) {
     console.log('/companies/:code - PUT')
     try {
@@ -91,6 +118,11 @@ companiesRouter.put('/:code', async function (req, res, next) {
     }
 })
 
+
+/**
+* Route that deletes a company's entry in the database.
+* Accepts a company's code, then returns it if delete was successfully.
+*/
 companiesRouter.delete('/:code', async function (req, res, next) {
     console.log('/companies/:code - DELETE')
 
